@@ -13,7 +13,7 @@
   }
 }
 
-.App-header {
+.App {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -29,10 +29,49 @@
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+  0% {
+    transform: scale(0.9);
   }
-  to {
-    transform: rotate(360deg);
+
+  50% {
+    transform: scale(1.3);
   }
+
+  100% {
+    transform: scale(0.9);
+  }
+}
+
+.pokelist {
+  display: grid;
+  grid-template-columns: repeat(2, calc(50% - 8px));
+  width: 100%;
+  column-gap: 16px;
+  grid-row-gap: 16px;
+}
+
+.pokecard {
+  border: 1px solid gray;
+  border-radius: 8px;
+  box-sizing: border-box;
+  display: flex;
+  column-gap: 16px;
+}
+
+.pokecard img {
+  object-fit: contain;
+}
+
+.pokeName {
+  text-transform: capitalize;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.loading {
+  animation: App-logo-spin infinite 2s ease-in-out;
 }

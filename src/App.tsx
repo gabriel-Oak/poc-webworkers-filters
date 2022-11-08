@@ -1,26 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { FC } from 'react';
+import { PokeListProvider } from './PokeList/PokeListContex';
 
-function App() {
-  return (
-    <div className="App">
+import './App.css';
+import PokeList from './PokeList';
+
+const App: FC = () => (
+  <PokeListProvider>
+    <main className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>
+          POKEMONS
+        </h1>
       </header>
-    </div>
-  );
-}
+
+      <PokeList />
+    </main>
+  </PokeListProvider>
+);
 
 export default App;
