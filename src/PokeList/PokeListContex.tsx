@@ -1,5 +1,5 @@
 import React, { createContext, FC, useContext, useEffect, useState } from "react";
-import { Pokemon, GenericItem } from '../types/pokemon';
+import { Pokemon } from '../types/pokemon';
 import Swal from "sweetalert2";
 import pokemonService from "../services/pokemon-service";
 

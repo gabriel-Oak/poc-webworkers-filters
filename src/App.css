@@ -22,6 +22,7 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding: 16px;
 }
 
 .App-link {
@@ -74,4 +75,33 @@
 
 .loading {
   animation: App-logo-spin infinite 2s ease-in-out;
+}
+
+.filter-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.filter-form input {
+  background-color: azure;
+  border: none;
+  padding: 8px;
+  font-size: 14px;
+  text-transform: capitalize;
+  margin-bottom: 12px;
+  border-radius: 4px;
+}
+
+.filter-form button {
+  max-width: 132px;
+  background-color: rgb(245, 55, 89);
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  margin-left: auto;
+  font-weight: 700;
+  font-size: 14px;
 }
