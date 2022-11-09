@@ -12,7 +12,7 @@ const App: FC = () => (
       <main className="App">
         <header className="App-header">
           <h1>
-            POKEMONS
+            POCKEMÓNS
           </h1>
         </header>
 

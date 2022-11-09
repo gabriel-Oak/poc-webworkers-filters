@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, FC, useContext, useEffect, useState } from "react";
 import { usePokeList } from "../PokeList/PokeListContex";
 import { useForm, UseFormReturn } from 'react-hook-form';
@@ -21,7 +22,7 @@ export const FilterProvider: FC<{
   const { pokemons } = usePokeList();
   const form = useForm<Filters>();
   const [pokemonsToShow, setPokemonsToShow] = useState([] as string[]);
-
+  
   const onSubmit = form.handleSubmit((filters: Filters) => filterJob.postMessage({
     filters,
     pokemons
