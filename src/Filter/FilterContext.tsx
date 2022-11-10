@@ -3,6 +3,7 @@ import React, { createContext, FC, useContext, useEffect, useState } from "react
 import { usePokeList } from "../PokeList/PokeListContex";
 import { useForm, UseFormReturn } from 'react-hook-form';
 import { Filters } from "../types/filter";
+import { filterByName, filterByType } from './functions';
 import WorkerBuilder from "../services/worker-builder";
 import filterWorker from "../services/filter-worker";
 
@@ -22,22 +23,26 @@ export const FilterProvider: FC<{
   const { pokemons } = usePokeList();
   const form = useForm<Filters>();
   const [pokemonsToShow, setPokemonsToShow] = useState([] as string[]);
-  
-  const onSubmit = form.handleSubmit((filters: Filters) => filterJob.postMessage({
-    filters,
-    pokemons
-  }));
+
+  const onSubmit = form.handleSubmit((filters: Filters) => filterJob
+    .postMessage({ type: 'FILTER', filters }));
 
   useEffect(() => {
     filterJob.onmessage = (message) => message && setPokemonsToShow(message.data);
-  }, []);
-
-  useEffect(() => {
-    const newList: string[] = [];
-    pokemons.forEach((p) => newList.push(p.name));
-    setPokemonsToShow(newList);
+    filterJob.postMessage({
+      type: 'INIT',
+      filterByName: filterByName.toString(),
+      filterByType: filterByType.toString(),
+      pokemons,
+    });
+    
+    filterJob.postMessage({
+      type: 'FILTER',
+      filters: { name: '', type: '' },
+    });
     form.reset();
   }, [pokemons]);
+
 
   return (
     <FilterContext.Provider value={{
