@@ -5,8 +5,6 @@ import { Pokemon } from "../types/pokemon";
 export interface InitAction {
   type: 'INIT',
   pokemons: Pokemon[];
-  filterByName: string;
-  filterByType: string;
 }
 
 export interface FilterAction {
@@ -17,25 +15,19 @@ export interface FilterWorkerData {
   data: InitAction | FilterAction;
 }
 
-type filterFunction = (filter: string, pokemons: Pokemon[]) => Pokemon[];
+const filterByName = (name: string, pokemons: Pokemon[]) => pokemons
+  .filter((pokemon) => pokemon.name.includes(name))
+
+const filterByType = (type: string, pokemons: Pokemon[]) => pokemons
+  .filter((pokemon) => pokemon.types
+    .some((t) => t.type.name.includes(type)));
 
 const filterWorker = () => {
-  console.log('log0');
 
   let pokemons = [] as Pokemon[];
-  let filterByName: filterFunction;
-  let filterByType: filterFunction;
 
-  const init = ({
-    pokemons: p,
-    filterByName: fName, 
-    filterByType: fType
-  }: InitAction) => {
-    console.log('log2', p);
-
+  const init = ({ pokemons: p }: InitAction) => {
     pokemons = p;
-    filterByName = eval(fName);
-    filterByType = eval(fType);
   }
 
   const filter = (filters: Filters) => {
@@ -44,13 +36,11 @@ const filterWorker = () => {
     let newPokemonsToShow = Array.from(pokemons);
     if (name) newPokemonsToShow = filterByName(name, newPokemonsToShow);
     if (type) newPokemonsToShow = filterByType(type, newPokemonsToShow);
-    
+
     return newPokemonsToShow.map(({ name }) => name);
   }
 
   self.onmessage = ({ data }: FilterWorkerData) => {
-    console.log('log1', data);
-
     switch (data.type) {
       case 'INIT':
         init(data);

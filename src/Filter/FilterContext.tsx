@@ -3,7 +3,6 @@ import React, { createContext, FC, useContext, useEffect, useState } from "react
 import { usePokeList } from "../PokeList/PokeListContex";
 import { useForm, UseFormReturn } from 'react-hook-form';
 import { Filters } from "../types/filter";
-import { filterByName, filterByType } from './functions';
 import WorkerBuilder from "../services/worker-builder";
 import filterWorker from "../services/filter-worker";
 
@@ -29,13 +28,7 @@ export const FilterProvider: FC<{
 
   useEffect(() => {
     filterJob.onmessage = (message) => message && setPokemonsToShow(message.data);
-    filterJob.postMessage({
-      type: 'INIT',
-      filterByName: filterByName.toString(),
-      filterByType: filterByType.toString(),
-      pokemons,
-    });
-    
+    filterJob.postMessage({ type: 'INIT', pokemons});
     filterJob.postMessage({
       type: 'FILTER',
       filters: { name: '', type: '' },
