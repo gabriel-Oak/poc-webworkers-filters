@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { Pokemon } from '../../types/pokemon';
 
 interface PokeCardProps {
@@ -19,7 +19,7 @@ const PokeCard: FC<PokeCardProps> = ({
           </h1>
         </header>
 
-        <section className='stats'>        
+        <section className='stats'>
           {pokemon.stats.map((stat) => (
             <p key={stat.stat.name} className="pokeName">
               {`${stat.stat.name}: `} <strong>{stat.base_stat}</strong>
@@ -31,4 +31,9 @@ const PokeCard: FC<PokeCardProps> = ({
   );
 }
 
-export default PokeCard;
+export default memo(PokeCard, (
+  prevProps: Readonly<PokeCardProps>,
+  nextProps: Readonly<PokeCardProps>,
+) => {
+  return JSON.stringify(prevProps.pokemon) !== JSON.stringify(nextProps.pokemon)
+});

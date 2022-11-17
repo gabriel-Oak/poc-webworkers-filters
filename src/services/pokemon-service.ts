@@ -9,7 +9,7 @@ client.interceptors.response.use(({ data }) => data, console.error);
 
 const pokemonService = {
   getPokemons: (): Promise<{ results: GenericItem[] }> => client
-    .get('/pokemon?limit=100&offset=0'),
+    .get('/pokemon?limit=500&offset=0'),
   getPokemonInfo: (pokemon: string): Promise<Pokemon> => client
     .get(`pokemon/${pokemon}`),
 }
