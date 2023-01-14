@@ -1,3 +1,5 @@
+[Portuguese version](https://www.tabnews.com.br/gabrielOak/performance-tuning-em-reactjs)
+
 You are working in a ReactJs project, codebase looks okay and everything is fine.
 But for some weird reason, the application presents slowness, and just the bundle
 optimization plugins are being enough. Wath did you do?
@@ -9,24 +11,27 @@ Passionate for technology and what I do.
 [Github](https://github.com/gabriel-Oak/) [LinkedIn](https://www.linkedin.com/in/gabriel-carvalho-costa) [Instagram](https://www.instagram.com/gabriel_oakcoast/)
 
 ## Why optimizing?
-Vamos começar com um questionamento. Afinal, o app já está em produção. Meu trabalho acabou, agora é só ficar na sustentação certo?
-Bom, espero que você não precise chegar ao ponto de mandatóriamente ter que rever a performance do seu app. Mas se for o seu caso, ou você só está interessado em melhorar um pouco a experiencia do seu usuário, este artigo pode te ajudar.
+Lets begin with a questioning. After all the app is already in production. My work is done, now it's just maintenance right? 
+Well, I hope that you don't get to the point of mandatory review your app performance. But if it's you case, or do you
+simply is interested in improving a bit of your user's experience, that article may help.
 
-## Renderização
-Você sabe como o React renderiza seus componentes?
+## Rendering
+Do you know how React renders its components?
 
-Sempre que as props(aqueles argumentos maravilhosos passados pelo componente pai), ou o state do proprio componente mudam, o React força um ciclo de renderização no componente, e toda sua árvore.
+Whenever the props(that arguments passed by father components), or the components own state changes, React rebuild that fella, AND
+all its tree.
 
-Ou seja, se você tem uma hierarquia de 3 componentes, e o primeiro atualiza, o seu filho, e o decendente seguinte são submetidos ao ciclo de renderização.
+That is, if you have a tree of 3 nodes and the first one re-render, its child, and the next descendant are submitted to the rendering circle.
 
-Em uma aplicação gigante cujos componentes e hooks não tenham sido bem planejados, isso pode virar um fuê de ciclos de atualização e dados tranzitando para lá e para cá rapidinho.
+In an giant application that it's components and hooks are not well planned, that can turn into a mess of circle of rendering and data
+flowing through any direction really really fast.
 
-## Como apagamos o incendio então?
-Iremos utilizar o React DevTools para identificar gargalos no processo de renderização dos componentes.
+## How do we put out the fire?
+We're going to use React DevTools to identify leaks in the rendering process.
 
 ![](https://www.rbsdirect.com.br/filestore/5/3/5/4_00fe3c60dfc0ec0/4535_9b658c573c2ceee.jpg?w=460)
 
-### Temos um app simples
+### We have a simple app
 ```tsx
 const App: FC = () => (
   <PokeListProvider>
@@ -87,53 +92,53 @@ const Filter: FC = () => {
 export default Filter;
 ```
 
-#### Notem que a renderização inicial carrega todos os cards
+#### Notice that the initial rendering loads all our cards
 ![](https://github.com/gabriel-Oak/poc-webworkers-filters/blob/main/images/Screenshot%20from%202022-11-29%2019-00-18.png?raw=true)
 
-#### Quando busco por pokemons de grama
+#### When I search for grass pokemons
 ![](https://github.com/gabriel-Oak/poc-webworkers-filters/blob/main/images/Screenshot%20from%202022-11-29%2019-17-29.png?raw=true)
 
-# Percebeu?
-Mesmo que o card do Bulbassauro não tenha saído da tela, ele renderizou de novo… E TODOS OS POKÉMONS DE GRAMA
+# Did you realised?
+Even that bubassour's card hasn't came out the screen, it renders again, AND ALL GRASS POKÉMONS TOO
 
-## O uso do React.memo
-O “memo” é um Higher Order Component, que diz ao React que, aquele componente que foi passado para ele, deve ser memorizado. 
+## The use of React.memo
+The “memo” is a Higher Order Component, wich tells React that that component passed to it, must be memoized. 
 
-Assim o React faz um pequeno esforço incial extra para memorizar o componente, evitando que no futuro aquele item seja recriado desnecessariamente.
+That way React does a little initial effort to memoize the component, avoiding future unnecessary rebuild.
 
 ```tsx
 export default memo(PokeCard);
 ```
 
-#### Note que agora não houve nenhum renderização nova
+#### Note that now we haven't any new render
 ![](https://github.com/gabriel-Oak/poc-webworkers-filters/blob/main/images/Screenshot%20from%202022-11-29%2019-18-13.png?raw=true)
 
-#### Quando retiro o filtro, agora só surgem os cards que não estavam
+#### When I remove the filter, only the cards that wasn't in the screen suffer changes
 ![](https://github.com/gabriel-Oak/poc-webworkers-filters/blob/main/images/Screenshot%20from%202022-11-29%2019-18-35.png?raw=true)
 
 ## 20,5 ms
-Antes do memo
+Before memo
 
 ## 2,9 ms
-Após o memo
+After memo
 
-## É só usar memo em tudo 
-Certo?
+## So, it's just using memo everywhere 
+Right?
 
-# Errado
-Devemos ter muito cuidado com o uso do memo, pois ele exige mais da máquina para fazer essa memorização.
+# Wrong
+We must be very careful using memo, because it requires more processing from the client's machine to memoise components.
 
-Apesar de isso ser muito util quando nosso componente é recriado sem alteração nas props.
+Beside that is very useful when our component is rebuild without any props changing, it isn't quite effective in components
+that changes a lot, as PokeList doe so. A memo there would only turn our app heavy unnecessarily. 
 
-Ele não é efetivo em componentes que atualizam muito, como PokeList. Um memo ali só tornaria nosso app um pouco mais pesado sem necessidade.
+And when we have tons of components in our application, we must analyze wizely before got memorizing everything.
 
-E quando temos milhares de componente em nossa aplicação, precisamos analizar com cuidado antes de sair memorizando tudo.
+## Okay, but what about useMemo?
+We may use the "useMemo" to memorize heavy processing and event lists of components. Taking the same careful, because useMemo
+also requires processing to do this memoize.
 
-## Tá mas e o useMemo?
-Podemos também utilizar o hook “useMemo” para fazer a memorização de cálculos pesados e até mesmo listas de componentes.
-Tomando o mesmo cuidado, pois useMemo também exige um pouco mais para fazer essa memorização.
-
-Caso nosso ```<PokeList />``` possuísse outros elementos que desencadeassem renderização, sem necessariamente afetar nossos pokemons, poderíamos usar useMemo para memorizar nossos elementos, “driblando” a renderização de ```<PokeList />``` devido a outros elementos(props, hooks, etc).
+In case of our ```<PokeList />``` had another elements that trigger rendering, whit no need to affect our pokemons, we could use 
+useMemo to memorize our cards, “by passing” the ```<PokeList />```'s rendering, triggered by other stuff(props, hooks, etc).
 
 ```tsx
 const PokeList: FC = () => {
@@ -158,8 +163,9 @@ const PokeList: FC = () => {
 }
 ```
 
-## Memo personalizado
-É possível também passar uma função que valida as props e retorne um booleano para que o react recrie ou não o componente
+## Custom memo
+It is possible too pass a function that validate the props and return a boolean in reason that React either rebuild 
+or not our component.
 
 ```tsx
 export default memo(PokeCard, (
@@ -171,13 +177,13 @@ export default memo(PokeCard, (
 ```
 
 ## Infinite scroll
-Outra técnica que podemos utilizar também é o “infinite scroll”.
+Another technique we may use is the “infinite scroll”.
 
-Consiste basicamente em limitar a quantidade de itens exibidos em tela, e carregar mais elementos apenas quando necessário.
+It consist into basically limit the amount of showing items in screen, and load more only when needed.
 
-Ou seja, o usuário chega perto do final da página, e os itens adicionais são carregados.
+In other words, the user get near to the page end, new items are feed to him.
 
-### Exemplo de implementação
+### Implementation Example
 ```tsx
 const [scrollTimeout, setScrollTimeout] = useState(null as unknown as NodeJS.Timeout);
 
@@ -221,25 +227,25 @@ const { loadingRowList, pokemons } = usePokeList();
     )), [pokemons, pokemonsToShow, amountToShow]);
 ```
 
-## Bonus
-Falamos brevemente sobre memorização aqui. Mas existem outros tópicos que podem ser interessantes.
+## Bônus
+We briefly discussed about memorizing here. But there are many more topics that may be interesting to you
 
 ![](https://github.com/gabriel-Oak/poc-webworkers-filters/blob/main/images/Screenshot%20from%202022-11-29%2019-19-31.png?raw=true)
 
-## Experimente também
-* React.lazy e code splitting
+## Try too
+* React.lazy and code splitting
 * WebWorkers
-* Bibliotecas gerenciadoras de data flow (Redux, MobX, BLoC)
+* Data flow management libraries (Redux, MobX, BLoC)
 
-# Obrigado!
-Alguma duvida?
-Você pode me encontrar em:
+# Thank You!
+Any doubt?
+You can find me in:
 
 [Github](https://github.com/gabriel-Oak/) [LinkedIn](https://www.linkedin.com/in/gabriel-carvalho-costa) [Instagram](https://www.instagram.com/gabriel_oakcoast/)
 
-## Creditos
-Agradecimentos especiais a Mariana, por me aturar falando de código por horas e ser minha revisora
+## Credits
+Special thanks to Mariana, for putting up with me talking about code for hours and being my proofreader
 
-[Apresentação Powerpoint](https://docs.google.com/presentation/d/1klB8fYZAVymbm-VNF3Dzl31KzjSuOUer5phUwe7gE9E/edit?usp=sharing)
+[Powerpoint Presentation(Portuguese)](https://docs.google.com/presentation/d/1klB8fYZAVymbm-VNF3Dzl31KzjSuOUer5phUwe7gE9E/edit?usp=sharing)
 
-[Link para o projeto](https://github.com/gabriel-Oak/poc-webworkers-filters/)
+[Link to the project](https://github.com/gabriel-Oak/poc-webworkers-filters/)
