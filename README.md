@@ -1,3 +1,5 @@
+[English version](https://www.tabnews.com.br/gabrielOak/performance-tunning-in-reactjs)
+
 Você está trabalhando em um projeto ReactJS, a codebase parece
 okay e tudo segue normalmente. Mas por algum motivo, a aplicação
 apresenta lentidão, e os plugins de otimização de bundle não estão

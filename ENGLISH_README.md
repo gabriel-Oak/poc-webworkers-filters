@@ -1,4 +1,4 @@
-[Portuguese version](https://www.tabnews.com.br/gabrielOak/performance-tuning-em-reactjs)
+[Versão em português](https://www.tabnews.com.br/gabrielOak/performance-tuning-em-reactjs)
 
 You are working in a ReactJs project, codebase looks okay and everything is fine.
 But for some weird reason, the application presents slowness, and just the bundle
