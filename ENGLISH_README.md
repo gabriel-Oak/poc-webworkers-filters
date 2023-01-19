@@ -2,7 +2,7 @@
 
 You are working in a ReactJs project, codebase looks okay and everything is fine.
 But for some weird reason, the application presents slowness, and just the bundle
-optimization plugins are being enough. Wath did you do?
+optimization plugins aren't being enough. Wath did you do?
 
 ## Hello World! I'm Gabriel Carvalho
 FrontEnd developer since 2019.                          
